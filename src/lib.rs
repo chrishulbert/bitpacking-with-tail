@@ -2,6 +2,11 @@ mod scalar;
 
 use bitpacking::{BitPacker, BitPacker8x};
 
+pub fn num_bits(data: &[u32]) -> u8 {
+    let combined = data.iter().fold(0u32, |acc, &v| acc | v);
+    ((32 - combined.leading_zeros()) as u8).max(1)
+}
+
 // This packs in a hybrid fashion: whatever is possible is packed with bitpacking,
 // the remaining tail is packed in a scalar fashion.
 // Note: The packer should keep track of the number of elements, because if num_bits is small, it can be vague
